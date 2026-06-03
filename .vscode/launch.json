@@ -1,0 +1,112 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // -----------------------------------------------------------------
+      // 1. Debug the synthgen CLI with a hard-coded prompt.
+      //    Edit "args" below to test different prompts. Set breakpoints
+      //    in src/synthgen/* and hit F5.
+      // -----------------------------------------------------------------
+      "name": "CLI: synthgen \"50 fake e-commerce orders\"",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "synthgen.cli",
+      "args": [
+        "Generate 50 fake e-commerce orders with realistic amounts",
+        "--count", "50",
+        "--seed", "42",
+        "--pretty"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        // Pulls from your shell — make sure GOOGLE_API_KEY is exported
+        // before launching VS Code, or hard-code it here for quick testing.
+        "GOOGLE_API_KEY": "${env:GOOGLE_API_KEY}"
+      }
+    },
+    {
+      // -----------------------------------------------------------------
+      // 2. Debug the CLI with a prompt you type at launch time.
+      //    VS Code asks for the prompt every time you press F5.
+      // -----------------------------------------------------------------
+      "name": "CLI: synthgen (prompt-on-launch)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "synthgen.cli",
+      "args": [
+        "${input:prompt}",
+        "--count", "${input:count}",
+        "--pretty"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "GOOGLE_API_KEY": "${env:GOOGLE_API_KEY}"
+      }
+    },
+    {
+      // -----------------------------------------------------------------
+      // 3. Debug the test file you currently have open.
+      //    Open any tests/unit/test_*.py file, press F5 → this runs JUST
+      //    that file under the debugger. Set breakpoints freely.
+      // -----------------------------------------------------------------
+      "name": "Pytest: current file",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": [
+        "${file}",
+        "-v",
+        "--no-cov"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      // -----------------------------------------------------------------
+      // 4. Run the whole unit test suite under the debugger.
+      // -----------------------------------------------------------------
+      "name": "Pytest: all unit tests",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": [
+        "tests/unit",
+        "-v",
+        "--no-cov"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      // -----------------------------------------------------------------
+      // 5. Run the example scripts under the debugger.
+      //    Switch "program" to point at any other example.
+      // -----------------------------------------------------------------
+      "name": "Example: generate_orders.py",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/examples/generate_orders.py",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "GOOGLE_API_KEY": "${env:GOOGLE_API_KEY}"
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "prompt",
+      "type": "promptString",
+      "description": "Prompt for synthgen",
+      "default": "Generate 50 fake users with names and emails"
+    },
+    {
+      "id": "count",
+      "type": "promptString",
+      "description": "Number of rows",
+      "default": "50"
+    }
+  ]
+}

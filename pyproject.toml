@@ -1,0 +1,116 @@
+[build-system]
+requires = ["hatchling>=1.21"]
+build-backend = "hatchling.build"
+
+[project]
+name = "synthgen"
+version = "0.2.0"
+description = "Conversational synthetic data generation — prompt-driven, pluggable LLM backends"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.10"
+authors = [{ name = "Synthgen Engineering" }]
+keywords = ["synthetic-data", "llm", "claude", "gemini", "faker", "testing", "mock-data"]
+
+# Core dependencies — needed by every install. The engine (generator,
+# schema, anomalies) works with just these. LLM backends are extras.
+#
+# sentence-transformers + chromadb power the semantic spec cache
+# (see ``synthgen._spec_cache``). They are heavy (~200–700MB once torch
+# is pulled in) but enable the prompt-similarity cache out of the box.
+# To skip them, pin them to no-op stubs or use ``Client(cache=None)`` —
+# the cache is opt-in at runtime even though the libraries are always
+# installed.
+dependencies = [
+    "faker>=24.0",
+    "mimesis>=15.0",
+    "numpy>=1.26",
+    "jsonschema>=4.21",
+    "sentence-transformers>=2.7",
+    "chromadb>=0.5",
+    "platformdirs>=4.0",
+]
+
+[project.optional-dependencies]
+# Pick one or more LLM backends:
+#   pip install synthgen[anthropic]      — Claude (recommended)
+#   pip install synthgen[gemini]         — Google Gemini
+#   pip install "synthgen[anthropic,gemini]"  — both
+anthropic = ["anthropic>=0.40.0"]
+gemini    = ["google-genai>=0.3.0"]
+all       = ["anthropic>=0.40.0", "google-genai>=0.3.0"]
+
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "ruff>=0.4.0",
+    "mypy>=1.10",
+    "types-jsonschema",
+    # Include both LLM SDKs for development so tests can import them.
+    "anthropic>=0.40.0",
+    "google-genai>=0.3.0",
+]
+
+[project.scripts]
+synthgen = "synthgen.cli:main"
+
+[project.urls]
+Homepage   = "https://github.com/example/synthgen"
+Repository = "https://github.com/example/synthgen"
+Issues     = "https://github.com/example/synthgen/issues"
+
+# ---------- hatch ----------
+[tool.hatch.build.targets.wheel]
+packages    = ["src/synthgen"]
+include     = ["src/synthgen/prompts/*.json", "src/synthgen/prompts/*.md", "src/synthgen/py.typed"]
+
+# ---------- ruff ----------
+[tool.ruff]
+line-length    = 100
+target-version = "py310"
+src            = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "N", "S", "W", "C4", "SIM", "RET"]
+ignore = ["S101"]   # allow `assert` in tests
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S", "B", "N802"]
+
+# ---------- mypy ----------
+[tool.mypy]
+python_version          = "3.10"
+strict                  = true
+warn_unused_configs     = true
+disallow_untyped_defs   = true
+no_implicit_optional    = true
+warn_redundant_casts    = true
+warn_unused_ignores     = true
+files                   = ["src/synthgen"]
+
+[[tool.mypy.overrides]]
+module = ["faker", "faker.*", "mimesis", "mimesis.*", "google.*"]
+ignore_missing_imports = true
+
+# ---------- pytest ----------
+[tool.pytest.ini_options]
+minversion       = "8.0"
+testpaths        = ["tests"]
+addopts          = ["-ra", "--strict-markers", "--strict-config", "--cov=synthgen", "--cov-report=term-missing"]
+markers          = [
+    "integration: tests that hit real Gemini API (slow, costs money, skipped by default)",
+    "eval: nightly eval harness against real Gemini",
+]
+filterwarnings   = ["error", "ignore::DeprecationWarning:google.*"]
+
+[tool.coverage.run]
+branch = true
+source = ["src/synthgen"]
+omit   = ["src/synthgen/cli.py"]   # CLI tested via subprocess
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+]

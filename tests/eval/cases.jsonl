@@ -1,0 +1,25 @@
+{"id": "users_basic", "prompt": "Generate 50 fake users with names and emails", "expected_min_fields": 2, "must_contain_field_with_provider": "email"}
+{"id": "ecommerce_orders", "prompt": "Generate 100 e-commerce orders with realistic amounts and timestamps from the last 30 days", "expected_min_fields": 3, "must_contain_field_with_provider": "date_time_between"}
+{"id": "iot_sensors", "prompt": "Stream temperature readings from 5 sensors with realistic ranges 18-30C", "expected_min_fields": 2, "must_contain_field_with_provider": "pyfloat"}
+{"id": "support_tickets", "prompt": "Customer support tickets with priority levels (low/med/high) and timestamps", "expected_min_fields": 3, "must_contain_field_with_provider": "random_element"}
+{"id": "transactions_with_outliers", "prompt": "Financial transactions with 2% outlier amounts", "expected_min_fields": 2, "must_contain_anomaly_type": "outlier"}
+{"id": "sensor_with_nulls", "prompt": "Sensor readings with 5% null values to simulate missing data", "expected_min_fields": 1, "must_contain_anomaly_type": "null"}
+{"id": "products", "prompt": "Product catalog with prices in USD, normal distribution between $10 and $500", "expected_min_fields": 2, "must_contain_distribution": "normal"}
+{"id": "user_signups", "prompt": "User signups over the last week with email, country, and signup time", "expected_min_fields": 3}
+{"id": "minimal_count", "prompt": "Just 5 fake names please", "expected_min_fields": 1}
+{"id": "geolocation", "prompt": "GPS readings with latitude and longitude in California", "expected_min_fields": 2}
+{"id": "credit_cards", "prompt": "Mock credit card transactions for fraud testing", "expected_min_fields": 3}
+{"id": "blog_posts", "prompt": "Blog post metadata with title, author, publish date, and word count", "expected_min_fields": 4}
+{"id": "log_entries", "prompt": "Web server access logs with IP, timestamp, URL, and status code", "expected_min_fields": 4, "must_contain_field_with_provider": "ipv4"}
+{"id": "employees", "prompt": "Employee records with names, job titles, departments, and salaries", "expected_min_fields": 4}
+{"id": "weather", "prompt": "Hourly weather observations: temperature, humidity, wind speed", "expected_min_fields": 3}
+{"id": "stuck_sensor", "prompt": "Sensor data where 3% of readings get stuck at -999", "expected_min_fields": 1, "must_contain_anomaly_type": "stuck_value"}
+{"id": "stock_prices", "prompt": "Stock price ticks for AAPL with timestamps", "expected_min_fields": 2}
+{"id": "uuid_only", "prompt": "Just UUIDs, 10 of them", "expected_min_fields": 1, "must_contain_field_with_provider": "uuid4"}
+{"id": "currency_mix", "prompt": "International payments in USD, EUR, GBP, and JPY", "expected_min_fields": 1, "must_contain_field_with_provider": "random_element"}
+{"id": "drift_simulation", "prompt": "Temperature sensor with sensor drift over time", "expected_min_fields": 1, "must_contain_anomaly_type": "drift"}
+{"id": "phone_numbers", "prompt": "Customer phone records with names and numbers", "expected_min_fields": 2, "must_contain_field_with_provider": "phone_number"}
+{"id": "long_text", "prompt": "Product reviews with full review text and star ratings", "expected_min_fields": 2}
+{"id": "spike_simulation", "prompt": "CPU usage metrics with occasional 1% spikes", "expected_min_fields": 1, "must_contain_anomaly_type": "spike"}
+{"id": "company_data", "prompt": "B2B leads with company name, contact, and industry", "expected_min_fields": 3, "must_contain_field_with_provider": "company"}
+{"id": "ambiguous_short", "prompt": "Some data", "expected_min_fields": 1}

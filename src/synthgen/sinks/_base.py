@@ -1,0 +1,9 @@
+from __future__ import annotations
+from typing import Protocol, runtime_checkable
+from ..types import Record
+
+@runtime_checkable
+class BaseSink(Protocol):
+    def write(self, record: Record) -> None: ...
+    def open(self) -> None: ...
+    def close(self) -> None: ...

@@ -1,0 +1,88 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      // The default test task — Cmd/Ctrl+Shift+P → "Tasks: Run Test Task"
+      // (or set a keybinding for "workbench.action.tasks.test").
+      "label": "Run unit tests",
+      "type": "shell",
+      "command": "${command:python.interpreterPath} -m pytest tests/unit -v --no-cov",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Run unit tests with coverage",
+      "type": "shell",
+      "command": "${command:python.interpreterPath} -m pytest tests/unit -v --cov=synthgen --cov-report=term-missing",
+      "group": "test",
+      "presentation": { "panel": "shared", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "Run eval harness (requires GOOGLE_API_KEY)",
+      "type": "shell",
+      "command": "${command:python.interpreterPath} -m pytest tests/eval -v -m eval",
+      "group": "test",
+      "presentation": { "panel": "shared", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      // The default build task — Cmd/Ctrl+Shift+B.
+      "label": "Lint (ruff)",
+      "type": "shell",
+      "command": "${command:python.interpreterPath} -m ruff check src tests",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": { "panel": "shared", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "Format (ruff)",
+      "type": "shell",
+      "command": "${command:python.interpreterPath} -m ruff format src tests",
+      "group": "build",
+      "presentation": { "panel": "shared", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "Type-check (mypy)",
+      "type": "shell",
+      "command": "${command:python.interpreterPath} -m mypy src/synthgen",
+      "group": "build",
+      "presentation": { "panel": "shared", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "Install dev dependencies",
+      "type": "shell",
+      "command": "${command:python.interpreterPath} -m pip install -e \".[dev]\"",
+      "group": "build",
+      "presentation": { "panel": "shared", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "All checks (ruff + mypy + pytest)",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Lint (ruff)",
+        "Type-check (mypy)",
+        "Run unit tests"
+      ],
+      "group": "test",
+      "presentation": { "panel": "shared", "clear": true },
+      "problemMatcher": []
+    }
+  ]
+}

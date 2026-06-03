@@ -1,0 +1,95 @@
+{
+  // ===========================================================================
+  // Python — interpreter + analysis
+  // ===========================================================================
+  // Tell VS Code where to find our virtualenv. Users still need to `python -m
+  // venv .venv && pip install -e ".[dev]"` once; after that, this setting
+  // auto-activates the right interpreter for the integrated terminal and the
+  // Python extension's IntelliSense.
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+
+  // Pylance reads the py.typed marker we ship; turn on strict type checking
+  // for our own source so problems show up inline as you type. Library files
+  // outside our source stay on default settings.
+  "python.analysis.typeCheckingMode": "standard",
+  "python.analysis.extraPaths": ["${workspaceFolder}/src"],
+  "python.analysis.diagnosticMode": "workspace",
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.indexing": true,
+
+  // ===========================================================================
+  // Ruff — lint + format on save
+  // ===========================================================================
+  // We use ruff (configured in pyproject.toml) for both linting and formatting.
+  // VS Code formats Python files on save, organizes imports, and applies safe
+  // autofixes — same behaviour as `ruff check --fix` on the CLI.
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    }
+  },
+
+  // ===========================================================================
+  // mypy — type-check on save, errors shown inline
+  // ===========================================================================
+  "mypy-type-checker.args": ["--config-file=pyproject.toml"],
+  "mypy-type-checker.preferDaemon": true,
+
+  // ===========================================================================
+  // pytest — discovery + test sidebar
+  // ===========================================================================
+  // Opening the Testing sidebar (flask icon) will auto-discover and let you
+  // run/debug any of the unit tests with a click. Eval tests are excluded —
+  // they hit real Gemini and require GOOGLE_API_KEY.
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestArgs": [
+    "tests/unit",
+    "--no-cov"  // suppress coverage during interactive runs (faster, less noisy)
+  ],
+  "python.testing.autoTestDiscoverOnSaveEnabled": true,
+
+  // ===========================================================================
+  // Editor — sensible Python defaults
+  // ===========================================================================
+  "editor.rulers": [100],          // matches our ruff line-length
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+
+  // ===========================================================================
+  // File tree — hide noise
+  // ===========================================================================
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    "**/.pytest_cache": true,
+    "**/.mypy_cache": true,
+    "**/.ruff_cache": true,
+    "**/*.egg-info": true,
+    "**/.coverage": true,
+    "**/htmlcov": true
+  },
+  "files.watcherExclude": {
+    "**/.venv/**": true,
+    "**/__pycache__/**": true,
+    "**/.pytest_cache/**": true,
+    "**/.mypy_cache/**": true
+  },
+  "search.exclude": {
+    "**/.venv": true,
+    "**/__pycache__": true,
+    "**/*.egg-info": true
+  },
+
+  // ===========================================================================
+  // Terminal — activate the venv automatically
+  // ===========================================================================
+  "python.terminal.activateEnvironment": true,
+  "python.terminal.activateEnvInCurrentTerminal": true
+}

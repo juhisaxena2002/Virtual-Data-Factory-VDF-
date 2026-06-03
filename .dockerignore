@@ -1,0 +1,24 @@
+# Keep the build context small. The Dockerfile only needs pyproject.toml,
+# README.md, LICENSE and src/ — everything else is excluded.
+.venv/
+.git/
+.github/
+.vscode/
+.claude/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+eval-results/
+tests/
+examples/
+my_prompt.py
+Dockerfile
+.dockerignore
+.gitignore

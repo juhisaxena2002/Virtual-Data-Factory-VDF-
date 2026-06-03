@@ -1,0 +1,7 @@
+conversation research
+sdk compatibility with frontend and connectors - yes connectors 
+integrate mqtt streaming
+add main.py + fastapi + frontend -  no need
+do sdk support frontend - not neccessary
+
+que - if we will add providers on the frontend then user cn enter key and name of model then use our app

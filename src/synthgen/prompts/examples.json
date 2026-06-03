@@ -1,0 +1,107 @@
+[
+  {
+    "user_prompt": "Generate 50 fake e-commerce orders with realistic amounts and timestamps from the last 30 days",
+    "spec": {
+      "dataset_name": "ecommerce_orders",
+      "count": 50,
+      "fields": [
+        { "name": "order_id", "type": "uuid", "provider": "uuid4" },
+        { "name": "customer_email", "type": "string", "provider": "email" },
+        {
+          "name": "amount",
+          "type": "float",
+          "provider": "pyfloat",
+          "args": { "min_value": 5, "max_value": 500, "right_digits": 2 },
+          "distribution": "normal"
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "provider": "random_element",
+          "args": { "elements": ["USD", "EUR", "GBP"] }
+        },
+        {
+          "name": "ordered_at",
+          "type": "datetime",
+          "provider": "date_time_between",
+          "args": { "start_date": "-30d", "end_date": "now" }
+        }
+      ]
+    }
+  },
+  {
+    "user_prompt": "Stream factory readings every 2 seconds — temperature, humidity inversely correlates with temperature, plus pressure",
+    "spec": {
+      "dataset_name": "factory_readings",
+      "count": 100,
+      "stream_interval_sec": 2,
+      "correlations": [
+        {
+          "mode": "derived",
+          "source": "temperature_c",
+          "target": "humidity_pct",
+          "slope": -1.5,
+          "intercept": 80,
+          "noise_std": 3,
+          "min_value": 10,
+          "max_value": 100
+        }
+      ],
+      "fields": [
+        {
+          "name": "temperature_c",
+          "type": "float",
+          "provider": "pyfloat",
+          "args": { "min_value": 18, "max_value": 35, "right_digits": 2 },
+          "distribution": "normal"
+        },
+        {
+          "name": "humidity_pct",
+          "type": "float",
+          "provider": "pyfloat",
+          "args": { "min_value": 10, "max_value": 100, "right_digits": 2 },
+          "distribution": "normal"
+        },
+        {
+          "name": "pressure_hpa",
+          "type": "float",
+          "provider": "pyfloat",
+          "args": { "min_value": 990, "max_value": 1030, "right_digits": 1 },
+          "distribution": "normal"
+        }
+      ]
+    }
+  },
+  {
+    "user_prompt": "Stream factory temperature sensor readings from 4 sensors every 2 seconds, occasional spikes 1% of the time",
+    "spec": {
+      "dataset_name": "factory_temp_sensors",
+      "count": 100,
+      "stream_interval_sec": 2,
+      "fields": [
+        {
+          "name": "sensor_id",
+          "type": "string",
+          "provider": "random_element",
+          "args": { "elements": ["S-001", "S-002", "S-003", "S-004"] }
+        },
+        {
+          "name": "temperature_c",
+          "type": "float",
+          "provider": "pyfloat",
+          "args": { "min_value": 18, "max_value": 85, "right_digits": 2 },
+          "distribution": "normal",
+          "anomalies": [
+            { "type": "spike", "rate": 0.01, "magnitude": 5 }
+          ]
+        },
+        {
+          "name": "timestamp",
+          "type": "datetime",
+          "provider": "date_time_between",
+          "args": { "start_date": "now", "end_date": "now" }
+        }
+      ]
+    }
+  }
+]

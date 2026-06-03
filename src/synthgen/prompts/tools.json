@@ -1,0 +1,114 @@
+[
+  {
+    "name": "emit_spec",
+    "description": "Emit a synthetic data spec matching the user's request. ALWAYS call this — never respond with plain text.",
+    "input_schema": {
+      "type": "object",
+      "required": ["dataset_name", "fields"],
+      "properties": {
+        "dataset_name": {
+          "type": "string",
+          "description": "Snake_case identifier for the dataset (e.g. 'ecommerce_orders')."
+        },
+        "count": {
+          "type": "integer",
+          "description": "Number of rows to generate. Maximum 200."
+        },
+        "stream_interval_sec": {
+          "type": "number",
+          "description": "Optional. Seconds between records when the data is streamed. Set this ONLY if the prompt mentions a streaming cadence. Convert rates to seconds-per-record: 'every 2 seconds' -> 2, 'one row a minute' -> 60, '10 per second' -> 0.1. Omit if the prompt says nothing about streaming rate."
+        },
+        "correlations": {
+          "type": "array",
+          "description": "Optional. Inter-field correlations. Omit when fields should be independent. Each entry is either a 'derived' relationship (one target = slope*source + intercept + noise) or a 'multivariate' joint Gaussian over 2+ numeric fields with a correlation matrix.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "mode": {
+                "type": "string",
+                "enum": ["derived", "multivariate"]
+              },
+              "source": { "type": "string", "description": "Derived only: field name that drives the target." },
+              "target": { "type": "string", "description": "Derived only: field name being computed." },
+              "slope": { "type": "number", "description": "Derived only." },
+              "intercept": { "type": "number", "description": "Derived only." },
+              "noise_std": { "type": "number", "description": "Derived only. Gaussian noise std-dev added to the linear prediction." },
+              "min_value": { "type": "number", "description": "Derived only. Clip lower bound." },
+              "max_value": { "type": "number", "description": "Derived only. Clip upper bound." },
+              "fields": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Multivariate only: 2+ numeric field names that move together."
+              },
+              "correlation": {
+                "type": "array",
+                "items": { "type": "array", "items": { "type": "number" } },
+                "description": "Multivariate only: N x N symmetric matrix with 1.0 on the diagonal and pairwise correlations in [-1, 1] off-diagonal."
+              }
+            }
+          }
+        },
+        "fields": {
+          "type": "array",
+          "description": "Column definitions.",
+          "items": {
+            "type": "object",
+            "required": ["name", "type", "provider"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Snake_case column name."
+              },
+              "type": {
+                "type": "string",
+                "enum": ["string", "int", "float", "bool", "datetime", "uuid"]
+              },
+              "provider": {
+                "type": "string",
+                "description": "One of the allowed provider names listed in the system prompt."
+              },
+              "args": {
+                "type": "object",
+                "description": "Keyword arguments passed to the provider (e.g. min_value, max_value, elements, start_date)."
+              },
+              "distribution": {
+                "type": "string",
+                "enum": ["uniform", "normal", "exponential", "choice", "sequential"]
+              },
+              "anomalies": {
+                "type": "array",
+                "description": "Optional anomaly injection directives.",
+                "items": {
+                  "type": "object",
+                  "required": ["type", "rate"],
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "null",
+                        "outlier",
+                        "stuck_value",
+                        "spike",
+                        "duplicate",
+                        "drift",
+                        "invalid_format"
+                      ]
+                    },
+                    "rate": {
+                      "type": "number",
+                      "description": "Fraction of rows affected, 0.0–1.0."
+                    },
+                    "magnitude": {
+                      "type": "number",
+                      "description": "Scaling factor; meaning depends on anomaly type."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+]

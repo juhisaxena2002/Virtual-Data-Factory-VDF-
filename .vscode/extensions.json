@@ -1,0 +1,22 @@
+{
+  // VS Code reads this when the workspace opens and offers to install any
+  // missing extensions. Users see a "Do you want to install the recommended
+  // extensions for this workspace?" prompt.
+  "recommendations": [
+    // Required — Python language support + debugger.
+    "ms-python.python",
+    // Pylance — fast type checker and IntelliSense. Reads our py.typed marker.
+    "ms-python.vscode-pylance",
+    // Ruff — lint + format, matches the config in pyproject.toml.
+    "charliermarsh.ruff",
+    // mypy — inline type errors as you type.
+    "ms-python.mypy-type-checker",
+    // Pretty TOML editing for pyproject.toml.
+    "tamasfe.even-better-toml",
+    // Git history and blame inline. Optional but useful.
+    "eamodio.gitlens",
+    // GitHub Actions workflow editor — for .github/workflows/ci.yml.
+    "github.vscode-github-actions"
+  ],
+  "unwantedRecommendations": []
+}

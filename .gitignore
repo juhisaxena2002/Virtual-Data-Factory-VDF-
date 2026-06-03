@@ -1,0 +1,48 @@
+# Byte-compiled
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Test + coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.cache
+
+# Type-check
+.mypy_cache/
+.ruff_cache/
+
+# Virtualenvs (including any side variants like .venv.broken/)
+.venv*/
+venv/
+env/
+
+# Internal tooling — Claude Code's per-project memory dir
+.claude/
+
+# IDE
+.idea/
+# VS Code: commit the shared workspace config (settings, launch, tasks,
+# extensions) but ignore everything else under .vscode/ — user-specific
+# state, local snippets, ipynb checkpoints, etc.
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/extensions.json
+*.swp
+
+# Eval results (auto-generated, useful to keep locally but not in git)
+eval-results/
+
+# OS
+.DS_Store
+Thumbs.db
